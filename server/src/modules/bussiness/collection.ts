@@ -1,4 +1,4 @@
 import { db } from '~/config/database'
-import { Bussiness } from './typeDefs/Bussiness'
+import { Business } from './typeDefs/Business'
 
-export const BussinessCollection = db.addCollection<Bussiness>('bussiness')
+export const BusinessCollection = db.addCollection<Business>('business')

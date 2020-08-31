@@ -4,10 +4,20 @@ import './config-aliases'
 import { buildSchema } from 'type-graphql'
 import { HealthResolver } from './modules/health/resolvers'
 import { ApolloServer } from 'apollo-server'
+import { BusinessResolver } from '~/modules/bussiness/resolvers'
+import { findAndStoreData } from '~/modules/bussiness/services/update-active-business'
+
+async function loadData () {
+  await findAndStoreData()
+}
 
 async function run () {
+  await loadData()
   const schema = await buildSchema({
-    resolvers: [HealthResolver],
+    resolvers: [
+      HealthResolver,
+      BusinessResolver
+    ],
     emitSchemaFile: true,
     validate: false
   })

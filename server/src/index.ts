@@ -4,8 +4,8 @@ import './config-aliases'
 import { buildSchema } from 'type-graphql'
 import { HealthResolver } from './modules/health/resolvers'
 import { ApolloServer } from 'apollo-server'
-import { BusinessResolver } from '~/modules/bussiness/resolvers'
-import { findAndStoreData } from '~/modules/bussiness/services/update-active-business'
+import { BusinessResolver } from '~/modules/business/resolvers'
+import { findAndStoreData } from '~/modules/business/services/update-active-business'
 
 async function loadData () {
   await findAndStoreData()

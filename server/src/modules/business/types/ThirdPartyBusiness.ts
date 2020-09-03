@@ -3,7 +3,7 @@ export type ThirdPartyLocation = {
     latitude: string
     longitude: string
 }
-export type ThirdPartyBussiness = {
+export type ThirdPartyBusiness = {
     location_account: string;
     business_name: string;
     dba_name: string;

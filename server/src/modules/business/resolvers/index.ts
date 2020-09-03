@@ -1,11 +1,12 @@
 import { Query, Resolver } from 'type-graphql'
-import { Business } from '~/modules/bussiness/typeDefs/Business'
-import { BusinessCollection } from '~/modules/bussiness/collection'
+import { Business } from '~/modules/business/typeDefs/Business'
+import { BusinessCollection } from '~/modules/business/collection'
+import { KeyValue } from '../../../types/KeyValue'
 
 @Resolver(() => Business)
 export class BusinessResolver {
   @Query(() => [Business], { nullable: true })
-  async bussiness () {
+  async businessMostLocations () {
     console.log('business')
     const bussinessArr = BusinessCollection.chain().data()
     const bussinessWithMostLocations = Object
@@ -15,7 +16,7 @@ export class BusinessResolver {
   }
 
   @Query(() => Business, { nullable: true })
-  async oldestBussiness () {
+  async oldestBusiness () {
     const bussinessArr = BusinessCollection.chain().data()
     return bussinessArr
       .reduce((oldest, current) => !oldest || oldest.locationStartDate > current.locationStartDate ? current : oldest)
@@ -32,6 +33,4 @@ const groupBy = function <T> (arr: T[], key: keyof T): KeyValue<T[]> {
   }, {} as KeyValue<T[]>)
 }
 
-type KeyValue<T> = {
-  [property: string]: T
-}
+

@@ -1,50 +1,42 @@
 import "leaflet-providers";
 import React from "react";
-import { Map, TileLayer } from "react-leaflet";
-import { makeStyles, Theme } from "@material-ui/core";
+import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import { useHome } from "./useHome";
-import { LatLngTuple } from "leaflet";
+import L, { LatLngTuple } from "leaflet";
+import { useStyles } from "./useStyles";
+import pin from "../assets/pin.svg";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    display: "flex",
-    width: "100vw",
-    height: "100vh",
-  },
-  speedDial: {
-    position: "absolute",
-    "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
-      bottom: theme.spacing(2),
-      right: theme.spacing(2),
-    },
-    "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
-      top: theme.spacing(2),
-      left: theme.spacing(2),
-    },
-  },
-  map: {
-    position: "fixed",
-    width: "100vw",
-    height: "100vh",
-    top: 0,
-    left: 0,
-  },
-}));
+const businessPinIcon = new L.Icon({
+  iconUrl: pin,
+  iconRetinaUrl: pin,
+  iconSize: new L.Point(40, 40),
+});
 
 export const Home = () => {
   const classes = useStyles();
-  const { actions, open, handleClose, handleOpen } = useHome();
+  const { data, actions, open, handleClose, handleOpen } = useHome();
   const position: LatLngTuple = [51.505, -0.09];
+
   return (
     <div className={classes.root}>
       <Map className={classes.map} center={position} zoom={5}>
         <TileLayer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+        {/* <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" /> */}
+        {data &&
+          data?.businessMostLocations.map((a: any) => (
+            <Marker
+              icon={businessPinIcon}
+              position={[a.location.latitude, a.location.longitude]}
+            >
+              <Popup>{JSON.stringify(a)}</Popup>
+            </Marker>
+          ))}
       </Map>
       <SpeedDial
-        ariaLabel="SpeedDial example"
+        ariaLabel="Business information"
         className={classes.speedDial}
         icon={<SpeedDialIcon />}
         onClose={handleClose}

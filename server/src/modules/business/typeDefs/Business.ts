@@ -1,5 +1,5 @@
 import { Field, ObjectType } from 'type-graphql'
-import { ThirdPartyBussiness } from '~/modules/bussiness/types/ThirdPartyBusiness'
+import { ThirdPartyBusiness } from '~/modules/business/types/ThirdPartyBusiness'
 import { Location, createLocationFromThirdPartyLocation } from './Location'
 
 @ObjectType()
@@ -84,7 +84,7 @@ export class Business {
   }
 }
 
-export const createBusinessFromThirdPartyBusiness = (business: ThirdPartyBussiness): Business => {
+export const createBusinessFromThirdPartyBusiness = (business: ThirdPartyBusiness): Business => {
   const location = business.location_1 && createLocationFromThirdPartyLocation(business.location_1)
   return new Business(
     business.location_account,

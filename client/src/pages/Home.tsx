@@ -8,6 +8,16 @@ import { useHome } from "./useHome";
 import L, { LatLngTuple } from "leaflet";
 import { useStyles } from "./useStyles";
 import pin from "../assets/pin.svg";
+import {
+  Paper,
+  Card,
+  CardHeader,
+  Avatar,
+  IconButton,
+  CardContent,
+} from "@material-ui/core";
+import BusinessIcon from "@material-ui/icons/Business";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 const businessPinIcon = new L.Icon({
   iconUrl: pin,
@@ -17,7 +27,7 @@ const businessPinIcon = new L.Icon({
 
 export const Home = () => {
   const classes = useStyles();
-  const { data, actions, open, handleClose, handleOpen } = useHome();
+  const { info, actions, open, handleClose, handleOpen } = useHome();
   const position: LatLngTuple = [51.505, -0.09];
 
   return (
@@ -25,16 +35,28 @@ export const Home = () => {
       <Map className={classes.map} center={position} zoom={5}>
         <TileLayer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png" />
         {/* <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" /> */}
-        {data &&
-          data?.businessMostLocations.map((a: any) => (
-            <Marker
-              icon={businessPinIcon}
-              position={[a.location.latitude, a.location.longitude]}
-            >
-              <Popup>{JSON.stringify(a)}</Popup>
-            </Marker>
-          ))}
+        {info.locations.map((a: any) => (
+          <Marker icon={businessPinIcon} position={[a.latitude, a.longitude]}>
+            <Popup>{JSON.stringify(info.business)}</Popup>
+          </Marker>
+        ))}
       </Map>
+      <Card elevation={2} className={classes.card}>
+        <CardHeader
+          avatar={
+            <Avatar aria-label="icon" className={classes.avatar}>
+              <BusinessIcon />
+            </Avatar>
+          }
+          action={
+            <IconButton aria-label="settings">
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title="Business"
+        />
+        <CardContent></CardContent>
+      </Card>
       <SpeedDial
         ariaLabel="Business information"
         className={classes.speedDial}
@@ -49,7 +71,7 @@ export const Home = () => {
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
-            onClick={handleClose}
+            onClick={(ev) => console.log(ev)}
           />
         ))}
       </SpeedDial>

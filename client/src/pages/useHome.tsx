@@ -1,13 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BusinessIcon from "@material-ui/icons/Business";
 import LocationCityIcon from "@material-ui/icons/LocationCity";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql, useLazyQuery } from "@apollo/client";
 
 const GET_OLD_BUSINESS = gql`
   {
     oldestBusiness {
+      locationAccount
       businessName
+      dbaName
+      streetAdress
+      city
+      zipCode
+      locationDescription
+      mailingAddress
+      mailingCity
+      mailingZipCode
+      naics
+      primaryNaicsDescription
+      councilDistrict
       locationStartDate
+      location {
+        latitude
+        longitude
+      }
     }
   }
 `;
@@ -15,27 +31,84 @@ const GET_OLD_BUSINESS = gql`
 const GET_MOST_LOCATIONS_BUSINESS = gql`
   {
     businessMostLocations {
+      locationAccount
       businessName
+      dbaName
+      streetAdress
+      city
+      zipCode
+      locationDescription
+      mailingAddress
+      mailingCity
+      mailingZipCode
+      naics
+      primaryNaicsDescription
+      councilDistrict
+      locationStartDate
       location {
         latitude
         longitude
       }
-      locationStartDate
     }
   }
 `;
+const OLD_BUSINESS_VIEW = 0;
+const MOST_LOCATIONS_BUSINESS_VIEW = 1;
 export const useHome = () => {
   const [open, setOpen] = React.useState(true);
-  // const {error, data} = useQuery(GET_OLD_BUSINESS);
-  const { error, data, loading } = useQuery(GET_MOST_LOCATIONS_BUSINESS);
+  const [viewMode, setViewMode] = React.useState(OLD_BUSINESS_VIEW);
+  const [info, setInfo] = React.useState<{ business: any; locations: any[] }>({
+    business: null,
+    locations: [],
+  });
+  const {
+    error: oldBusinessError,
+    loading: oldBusinessLoading,
+    data: oldBusinessData,
+    refetch: oldBusinessRefetch,
+  } = useQuery(GET_OLD_BUSINESS);
+  const [
+    getMostLocationsBusiness,
+    {
+      error: mostLocationsBusinessError,
+      data: mostLocationsBusinessData,
+      loading: mostLocationsBusinessLoading,
+      refetch: mostLocationsBusinessRefetch,
+    },
+  ] = useLazyQuery(GET_MOST_LOCATIONS_BUSINESS);
 
-  console.log("getOldBusiness", data);
-  // console.log("getMostLocationsBusiness", getMostLocationsBusiness);
+  useEffect(() => {
+    if (viewMode === OLD_BUSINESS_VIEW && oldBusinessData) {
+      const {
+        oldestBusiness: { location, ...business },
+      } = oldBusinessData;
+      setInfo({ business, locations: [location] });
+    }
+  }, [viewMode, oldBusinessData]);
+
+  useEffect(() => {
+    if (
+      viewMode === MOST_LOCATIONS_BUSINESS_VIEW &&
+      mostLocationsBusinessData
+    ) {
+      console.log("mostLocationsBusinessData", mostLocationsBusinessData);
+      // setInfo({ business, locations: [location] });
+    }
+  }, [viewMode, mostLocationsBusinessData]);
 
   const actions = [
-    { icon: <BusinessIcon />, name: "Business with the most locations" },
-    { icon: <LocationCityIcon />, name: "Oldest Business" },
+    {
+      icon: <BusinessIcon />,
+      name: "Business with the most locations",
+      onClick: () => getMostLocationsBusiness(),
+    },
+    {
+      icon: <LocationCityIcon />,
+      name: "Oldest Business",
+      onClick: () => oldBusinessRefetch(),
+    },
   ];
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -43,5 +116,5 @@ export const useHome = () => {
   const handleOpen = () => {
     setOpen(true);
   };
-  return { actions, open, handleClose, handleOpen, data };
+  return { actions, open, handleClose, handleOpen, info };
 };

@@ -4,49 +4,49 @@ import { Location, createLocationFromThirdPartyLocation } from './Location'
 
 @ObjectType()
 export class Business {
-  @Field()
+  @Field({ nullable: true })
   locationAccount: string
 
-  @Field()
+  @Field({ nullable: true })
   businessName: string
 
-  @Field()
+  @Field({ nullable: true })
   dbaName: string
 
-  @Field()
+  @Field({ nullable: true })
   streetAdress: string
 
-  @Field()
+  @Field({ nullable: true })
   city: string
 
-  @Field()
+  @Field({ nullable: true })
   zipCode: string
 
-  @Field()
+  @Field({ nullable: true })
   locationDescription: string
 
-  @Field()
+  @Field({ nullable: true })
   mailingAddress: string
 
-  @Field()
+  @Field({ nullable: true })
   mailingCity: string
 
-  @Field()
+  @Field({ nullable: true })
   mailingZipCode: string
 
-  @Field()
+  @Field({ nullable: true })
   naics: string
 
-  @Field()
+  @Field({ nullable: true })
   primaryNaicsDescription: string
 
-  @Field()
+  @Field({ nullable: true })
   councilDistrict: string
 
-  @Field()
+  @Field({ nullable: true })
   locationStartDate: Date
 
-  @Field()
+  @Field({ nullable: true })
   location?: Location
 
   constructor(

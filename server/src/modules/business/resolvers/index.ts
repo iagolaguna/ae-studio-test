@@ -7,19 +7,18 @@ import { KeyValue } from '../../../types/KeyValue'
 export class BusinessResolver {
   @Query(() => [Business], { nullable: true })
   async businessMostLocations () {
-    console.log('business')
-    const bussinessArr = BusinessCollection.chain().data()
+    const business = BusinessCollection.chain().data()
     const bussinessWithMostLocations = Object
-      .values(groupBy<Business>(bussinessArr, 'businessName'))
+      .values(groupBy<Business>(business, 'businessName'))
       .reduce((major: Business[], currentGroup: Business[]) => currentGroup.length > major.length ? currentGroup : major, [])
     return bussinessWithMostLocations
   }
 
   @Query(() => Business, { nullable: true })
   async oldestBusiness () {
-    const bussinessArr = BusinessCollection.chain().data()
-    return bussinessArr
-      .reduce((oldest, current) => !oldest || oldest.locationStartDate > current.locationStartDate ? current : oldest)
+    const reducer = (oldest: Business, current: Business) => !oldest || oldest.locationStartDate > current.locationStartDate ? current : oldest
+    const business = BusinessCollection.chain().data() as Business[]
+    return business.reduce(reducer)
   }
 }
 
@@ -32,5 +31,3 @@ const groupBy = function <T> (arr: T[], key: keyof T): KeyValue<T[]> {
     }
   }, {} as KeyValue<T[]>)
 }
-
-

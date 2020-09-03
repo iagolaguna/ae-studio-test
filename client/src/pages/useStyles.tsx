@@ -23,4 +23,13 @@ export const useStyles = makeStyles((theme: Theme) => ({
     top: 0,
     left: 0,
   },
+  avatar: {
+    backgroundColor: theme.palette.primary.main,
+  },
+  card: {
+    position: "fixed",
+    right: "50px",
+    top: "50px",
+    minWidth: "350px",
+  },
 }));

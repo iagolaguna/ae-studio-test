@@ -1,61 +1,15 @@
 import React, { useEffect } from "react";
 import BusinessIcon from "@material-ui/icons/Business";
 import LocationCityIcon from "@material-ui/icons/LocationCity";
-import { useQuery, gql, useLazyQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
+import { GET_OLD_BUSINESS } from "./GetOldBusinessQuery";
+import { GET_MOST_LOCATIONS_BUSINESS } from "./GetMostLocationsBusinessQuery";
 
-const GET_OLD_BUSINESS = gql`
-  {
-    oldestBusiness {
-      locationAccount
-      businessName
-      dbaName
-      streetAdress
-      city
-      zipCode
-      locationDescription
-      mailingAddress
-      mailingCity
-      mailingZipCode
-      naics
-      primaryNaicsDescription
-      councilDistrict
-      locationStartDate
-      location {
-        latitude
-        longitude
-      }
-    }
-  }
-`;
-
-const GET_MOST_LOCATIONS_BUSINESS = gql`
-  {
-    businessMostLocations {
-      locationAccount
-      businessName
-      dbaName
-      streetAdress
-      city
-      zipCode
-      locationDescription
-      mailingAddress
-      mailingCity
-      mailingZipCode
-      naics
-      primaryNaicsDescription
-      councilDistrict
-      locationStartDate
-      location {
-        latitude
-        longitude
-      }
-    }
-  }
-`;
 const OLD_BUSINESS_VIEW = 0;
 const MOST_LOCATIONS_BUSINESS_VIEW = 1;
+
 export const useHome = () => {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [viewMode, setViewMode] = React.useState(OLD_BUSINESS_VIEW);
   const [info, setInfo] = React.useState<{ business: any; locations: any[] }>({
     business: null,
@@ -67,6 +21,7 @@ export const useHome = () => {
     data: oldBusinessData,
     refetch: oldBusinessRefetch,
   } = useQuery(GET_OLD_BUSINESS);
+
   const [
     getMostLocationsBusiness,
     {
@@ -82,7 +37,9 @@ export const useHome = () => {
       const {
         oldestBusiness: { location, ...business },
       } = oldBusinessData;
-      setInfo({ business, locations: [location] });
+      const info = { business, locations: [location] };
+      console.log("info", info);
+      setInfo(info);
     }
   }, [viewMode, oldBusinessData]);
 
@@ -92,7 +49,12 @@ export const useHome = () => {
       mostLocationsBusinessData
     ) {
       console.log("mostLocationsBusinessData", mostLocationsBusinessData);
-      // setInfo({ business, locations: [location] });
+      const { businessMostLocations: data } = mostLocationsBusinessData;
+
+      const [first] = data;
+      const { location, ...business } = first;
+      const locations = data.map(({ location }: any) => location);
+      setInfo({ business, locations });
     }
   }, [viewMode, mostLocationsBusinessData]);
 
@@ -100,12 +62,18 @@ export const useHome = () => {
     {
       icon: <BusinessIcon />,
       name: "Business with the most locations",
-      onClick: () => getMostLocationsBusiness(),
+      onClick: () => {
+        getMostLocationsBusiness();
+        setViewMode(MOST_LOCATIONS_BUSINESS_VIEW);
+      },
     },
     {
       icon: <LocationCityIcon />,
       name: "Oldest Business",
-      onClick: () => oldBusinessRefetch(),
+      onClick: () => {
+        oldBusinessRefetch();
+        setViewMode(OLD_BUSINESS_VIEW);
+      },
     },
   ];
 

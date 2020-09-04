@@ -14,6 +14,10 @@ export const useStyles = makeStyles((theme: Theme) => ({
     "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
       top: theme.spacing(2),
       left: theme.spacing(2),
+      [theme.breakpoints.down("xs")]: {
+        right: theme.spacing(2),
+        left: "inherit",
+      },
     },
   },
   map: {
@@ -28,8 +32,20 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   card: {
     position: "fixed",
+    minWidth: "350px",
     right: "50px",
     top: "50px",
-    minWidth: "350px",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      bottom: "-150px",
+      borderTopLeftRadius: "10%",
+      borderTopRightRadius: "10%",
+      right: "inherit",
+      top: "inherit",
+      transition: "bottom 1s",
+    },
+  },
+  cardToggle: {
+    bottom: "0px",
   },
 }));

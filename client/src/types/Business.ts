@@ -1,5 +1,6 @@
+import Location from './Location'
 
-export type Business = {
+interface Business {
     locationAccount?: string
     businessName?: string
     dbaName?: string
@@ -17,7 +18,4 @@ export type Business = {
     location?: Location
 }
 
-export type Location = {
-    latitude: number
-    longitude: number
-}
+export default Business

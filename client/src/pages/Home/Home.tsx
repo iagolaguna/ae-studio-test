@@ -8,9 +8,9 @@ import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import { useHome } from "./useHome";
 import { useStyles } from "./useStyles";
 import { CardBusiness } from "./components/CardBusiness/CardBusiness";
-import BusinessPinIcon from "./BusinessPinIcon";
-import { Business } from "types/Business";
-import FocusBusinessPinIcon from "./FocusBusinessPinIcon";
+import BusinessPinIcon from "./components/BusinessPinIcon";
+import FocusBusinessPinIcon from "./components/FocusBusinessPinIcon";
+import Business from 'types/Business';
 
 export const Home = () => {
   const classes = useStyles();

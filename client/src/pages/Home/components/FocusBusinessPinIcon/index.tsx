@@ -1,5 +1,5 @@
 import L from "leaflet";
-import pin from "../../assets/pin.svg";
+import pin from "./focus-pin.svg";
 
 export default new L.Icon({
   iconUrl: pin,

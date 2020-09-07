@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import BusinessIcon from "@material-ui/icons/Business";
-import { Business } from "types/Business";
+import Business from 'types/Business';
 import { useCardBusiness } from "./useCardBusiness";
 import { useStyles } from "./useStyles";
 

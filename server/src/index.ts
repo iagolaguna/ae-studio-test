@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import 'reflect-metadata'
 import './config-aliases'
+import { CronJob } from 'cron'
 import { buildSchema } from 'type-graphql'
 import { HealthResolver } from './modules/health/resolvers'
 import { ApolloServer } from 'apollo-server'
@@ -11,8 +12,13 @@ async function loadData () {
   await findAndStoreData()
 }
 
+// To keep data been updated every month
+const cronjob = new CronJob('1 * 1 * *', loadData)
+
 async function run () {
   await loadData()
+  cronjob.start()
+
   const schema = await buildSchema({
     resolvers: [
       HealthResolver,

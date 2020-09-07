@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import BusinessIcon from "@material-ui/icons/Business";
 import LocationCityIcon from "@material-ui/icons/LocationCity";
 import { useQuery, useLazyQuery } from "@apollo/client";
-import { GET_OLD_BUSINESS } from "./querys/GetOldBusinessQuery";
-import { GET_MOST_LOCATIONS_BUSINESS } from "./querys/GetMostLocationsBusinessQuery";
+import { GET_OLD_BUSINESS } from "./queries/GetOldBusinessQuery";
+import { GET_MOST_LOCATIONS_BUSINESS } from "./queries/GetMostLocationsBusinessQuery";
 import Business from "types/Business";
 import { LatLngTuple } from "leaflet";
 

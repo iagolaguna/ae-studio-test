@@ -5,46 +5,53 @@ import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import { useMediaQuery, Theme } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
-import { LatLngTuple } from "leaflet";
 import { useHome } from "./useHome";
 import { useStyles } from "./useStyles";
 import { CardBusiness } from "./components/CardBusiness/CardBusiness";
 import BusinessPinIcon from "./BusinessPinIcon";
 import { Business } from "types/Business";
+import FocusBusinessPinIcon from "./FocusBusinessPinIcon";
 
 export const Home = () => {
   const classes = useStyles();
   const {
+    center,
     business,
     focusedBusiness,
     actions,
     open,
     handleClose,
     handleOpen,
+    focusBusiness,
   } = useHome();
-  const center: LatLngTuple =
-    focusedBusiness && focusedBusiness.location
-      ? [
-          focusedBusiness.location?.latitude,
-          focusedBusiness.location?.longitude,
-        ]
-      : [39.106667, -94.676392];
 
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down("xs"));
 
   return (
     <div className={classes.root}>
-      <Map className={classes.map} center={center} zoom={3} minZoom={3}>
+      <Map
+        className={classes.map}
+        center={center}
+        zoom={10}
+        minZoom={3}
+        animate
+        fadeAnimation
+      >
         <TileLayer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png" />
         {business.map(
           (business: Business) =>
             business.location && (
               <Marker
-                icon={BusinessPinIcon}
+                icon={
+                  business === focusedBusiness
+                    ? FocusBusinessPinIcon
+                    : BusinessPinIcon
+                }
                 position={[
                   business.location?.latitude,
                   business.location?.longitude,
                 ]}
+                onclick={() => focusBusiness(business)}
               ></Marker>
             )
         )}

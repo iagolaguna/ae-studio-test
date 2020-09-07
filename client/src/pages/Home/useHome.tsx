@@ -5,6 +5,7 @@ import { useQuery, useLazyQuery } from "@apollo/client";
 import { GET_OLD_BUSINESS } from "./querys/GetOldBusinessQuery";
 import { GET_MOST_LOCATIONS_BUSINESS } from "./querys/GetMostLocationsBusinessQuery";
 import { Business } from "types/Business";
+import { LatLngTuple } from "leaflet";
 
 const OLD_BUSINESS_VIEW = 0;
 const MOST_LOCATIONS_BUSINESS_VIEW = 1;
@@ -14,6 +15,7 @@ export const useHome = () => {
   const [viewMode, setViewMode] = React.useState(OLD_BUSINESS_VIEW);
   const [focusedBusiness, setFocusedBusiness] = useState<Business>();
   const [business, setBusiness] = useState<Business[]>([]);
+  const [center, setCenter] = useState<LatLngTuple>([39.106667, -94.676392]);
 
   const {
     error: oldBusinessError,
@@ -31,11 +33,17 @@ export const useHome = () => {
     },
   ] = useLazyQuery(GET_MOST_LOCATIONS_BUSINESS);
 
+  const getLocation = (business: Business): LatLngTuple =>
+    business.location
+      ? [business.location.latitude, business.location.longitude]
+      : center;
+
   useEffect(() => {
     if (viewMode === OLD_BUSINESS_VIEW && oldBusinessData) {
       const { oldestBusiness } = oldBusinessData;
       setFocusedBusiness(oldestBusiness);
       setBusiness([oldestBusiness]);
+      setCenter(getLocation(oldestBusiness));
     }
   }, [viewMode, oldBusinessData]);
 
@@ -46,9 +54,9 @@ export const useHome = () => {
     ) {
       const { businessMostLocations: data } = mostLocationsBusinessData;
       const [first] = data;
-      const { location, ...business } = first;
       setFocusedBusiness(first);
       setBusiness(data);
+      setCenter(getLocation(first));
     }
   }, [viewMode, mostLocationsBusinessData]);
 
@@ -79,6 +87,7 @@ export const useHome = () => {
     setOpen(true);
   };
   return {
+    center,
     actions,
     open,
     handleClose,
@@ -86,5 +95,6 @@ export const useHome = () => {
     business,
     focusedBusiness,
     loading: oldBusinessLoading || mostLocationsBusinessLoading,
+    focusBusiness: (business: Business) => setFocusedBusiness(business),
   };
 };

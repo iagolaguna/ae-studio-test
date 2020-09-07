@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import BusinessIcon from "@material-ui/icons/Business";
 import LocationCityIcon from "@material-ui/icons/LocationCity";
 import { useQuery, useLazyQuery } from "@apollo/client";
-import { GET_OLD_BUSINESS } from "./GetOldBusinessQuery";
-import { GET_MOST_LOCATIONS_BUSINESS } from "./GetMostLocationsBusinessQuery";
+import { GET_OLD_BUSINESS } from "./querys/GetOldBusinessQuery";
+import { GET_MOST_LOCATIONS_BUSINESS } from "./querys/GetMostLocationsBusinessQuery";
+import { Business } from "types/Business";
 
 const OLD_BUSINESS_VIEW = 0;
 const MOST_LOCATIONS_BUSINESS_VIEW = 1;
@@ -11,10 +12,9 @@ const MOST_LOCATIONS_BUSINESS_VIEW = 1;
 export const useHome = () => {
   const [open, setOpen] = React.useState(false);
   const [viewMode, setViewMode] = React.useState(OLD_BUSINESS_VIEW);
-  const [info, setInfo] = React.useState<{ business: any; locations: any[] }>({
-    business: null,
-    locations: [],
-  });
+  const [focusedBusiness, setFocusedBusiness] = useState<Business>();
+  const [business, setBusiness] = useState<Business[]>([]);
+
   const {
     error: oldBusinessError,
     loading: oldBusinessLoading,
@@ -28,18 +28,14 @@ export const useHome = () => {
       error: mostLocationsBusinessError,
       data: mostLocationsBusinessData,
       loading: mostLocationsBusinessLoading,
-      refetch: mostLocationsBusinessRefetch,
     },
   ] = useLazyQuery(GET_MOST_LOCATIONS_BUSINESS);
 
   useEffect(() => {
     if (viewMode === OLD_BUSINESS_VIEW && oldBusinessData) {
-      const {
-        oldestBusiness: { location, ...business },
-      } = oldBusinessData;
-      const info = { business, locations: [location] };
-      console.log("info", info);
-      setInfo(info);
+      const { oldestBusiness } = oldBusinessData;
+      setFocusedBusiness(oldestBusiness);
+      setBusiness([oldestBusiness]);
     }
   }, [viewMode, oldBusinessData]);
 
@@ -48,13 +44,11 @@ export const useHome = () => {
       viewMode === MOST_LOCATIONS_BUSINESS_VIEW &&
       mostLocationsBusinessData
     ) {
-      console.log("mostLocationsBusinessData", mostLocationsBusinessData);
       const { businessMostLocations: data } = mostLocationsBusinessData;
-
       const [first] = data;
       const { location, ...business } = first;
-      const locations = data.map(({ location }: any) => location);
-      setInfo({ business, locations });
+      setFocusedBusiness(first);
+      setBusiness(data);
     }
   }, [viewMode, mostLocationsBusinessData]);
 
@@ -84,5 +78,13 @@ export const useHome = () => {
   const handleOpen = () => {
     setOpen(true);
   };
-  return { actions, open, handleClose, handleOpen, info };
+  return {
+    actions,
+    open,
+    handleClose,
+    handleOpen,
+    business,
+    focusedBusiness,
+    loading: oldBusinessLoading || mostLocationsBusinessLoading,
+  };
 };

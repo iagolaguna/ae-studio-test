@@ -1,10 +1,10 @@
-import 'leaflet/dist/leaflet.css'
+import "leaflet/dist/leaflet.css";
 import React from "react";
 import { ThemeProvider } from "@material-ui/core/styles";
-import { CssBaseline } from '@material-ui/core';
+import { CssBaseline } from "@material-ui/core";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { ApolloProvider } from "@apollo/react-hooks";
-import { Home } from "./pages/Home";
+import { Home } from "./pages/Home/Home";
 import { theme } from "./theme";
 
 const client = new ApolloClient({

@@ -4,15 +4,23 @@ import LocationCityIcon from "@material-ui/icons/LocationCity";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { GET_OLD_BUSINESS } from "./querys/GetOldBusinessQuery";
 import { GET_MOST_LOCATIONS_BUSINESS } from "./querys/GetMostLocationsBusinessQuery";
-import Business from 'types/Business';
+import Business from "types/Business";
 import { LatLngTuple } from "leaflet";
 
 const OLD_BUSINESS_VIEW = 0;
 const MOST_LOCATIONS_BUSINESS_VIEW = 1;
 
+type MostLocationsBusiness = {
+  businessMostLocations: Business[];
+};
+
+type OldestBusiness = {
+  oldestBusiness: Business;
+};
+
 export const useHome = () => {
-  const [open, setOpen] = React.useState(false);
-  const [viewMode, setViewMode] = React.useState(OLD_BUSINESS_VIEW);
+  const [open, setOpen] = useState(false);
+  const [viewMode, setViewMode] = useState(OLD_BUSINESS_VIEW);
   const [focusedBusiness, setFocusedBusiness] = useState<Business>();
   const [business, setBusiness] = useState<Business[]>([]);
   const [center, setCenter] = useState<LatLngTuple>([39.106667, -94.676392]);
@@ -22,7 +30,7 @@ export const useHome = () => {
     loading: oldBusinessLoading,
     data: oldBusinessData,
     refetch: oldBusinessRefetch,
-  } = useQuery(GET_OLD_BUSINESS);
+  } = useQuery<OldestBusiness>(GET_OLD_BUSINESS);
 
   const [
     getMostLocationsBusiness,
@@ -31,10 +39,10 @@ export const useHome = () => {
       data: mostLocationsBusinessData,
       loading: mostLocationsBusinessLoading,
     },
-  ] = useLazyQuery(GET_MOST_LOCATIONS_BUSINESS);
+  ] = useLazyQuery<MostLocationsBusiness>(GET_MOST_LOCATIONS_BUSINESS);
 
-  const getLocation = (business: Business): LatLngTuple =>
-    business.location
+  const getLocation = (business?: Business): LatLngTuple =>
+    business && business.location
       ? [business.location.latitude, business.location.longitude]
       : center;
 
@@ -53,10 +61,10 @@ export const useHome = () => {
       mostLocationsBusinessData
     ) {
       const { businessMostLocations: data } = mostLocationsBusinessData;
-      const [first] = data;
-      setFocusedBusiness(first);
+      const business = data.find((buss: Business) => !!buss.location);
+      setFocusedBusiness(business || data[0]);
       setBusiness(data);
-      setCenter(getLocation(first));
+      setCenter(getLocation(business));
     }
   }, [viewMode, mostLocationsBusinessData]);
 
@@ -79,13 +87,10 @@ export const useHome = () => {
     },
   ];
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClose = () => setOpen(false);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
+  const handleOpen = () => setOpen(true);
+
   return {
     center,
     actions,

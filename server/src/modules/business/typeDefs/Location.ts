@@ -15,4 +15,11 @@ export class Location {
   }
 }
 
-export const createLocationFromThirdPartyLocation = ({ latitude, longitude }: ThirdPartyLocation) => new Location(parseFloat(latitude), parseFloat(longitude))
+export const createLocationFromThirdPartyLocation = ({ latitude, longitude }: ThirdPartyLocation) => {
+  const parsedLatitude = parseFloat(latitude)
+  const parsedLongitude = parseFloat(longitude)
+  if (parsedLatitude === 0 && parsedLongitude === 0) {
+    return
+  }
+  return new Location(parsedLatitude, parsedLongitude)
+}

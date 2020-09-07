@@ -21,5 +21,5 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     cardToggle: {
         bottom: "0px",
-    },
+    }
 }));

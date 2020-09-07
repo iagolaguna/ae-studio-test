@@ -10,7 +10,7 @@ import { useStyles } from "./useStyles";
 import { CardBusiness } from "./components/CardBusiness/CardBusiness";
 import BusinessPinIcon from "./components/BusinessPinIcon";
 import FocusBusinessPinIcon from "./components/FocusBusinessPinIcon";
-import Business from 'types/Business';
+import Business from "types/Business";
 
 export const Home = () => {
   const classes = useStyles();
@@ -56,8 +56,7 @@ export const Home = () => {
             )
         )}
       </Map>
-
-      <CardBusiness business={focusedBusiness} />
+      {focusedBusiness && <CardBusiness business={focusedBusiness} />}
       <SpeedDial
         ariaLabel="Business information"
         className={classes.speedDial}

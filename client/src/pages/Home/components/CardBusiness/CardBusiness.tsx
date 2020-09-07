@@ -5,15 +5,15 @@ import {
   CardHeader,
   Avatar,
   CardContent,
-  Typography,
 } from "@material-ui/core";
 import BusinessIcon from "@material-ui/icons/Business";
-import Business from 'types/Business';
+import Business from "types/Business";
 import { useCardBusiness } from "./useCardBusiness";
 import { useStyles } from "./useStyles";
+import Label from "./components/Label";
 
 export type CardBusinessProps = {
-  business?: Business;
+  business: Business;
 };
 
 export const CardBusiness = ({ business }: CardBusinessProps) => {
@@ -23,7 +23,8 @@ export const CardBusiness = ({ business }: CardBusinessProps) => {
     handlers,
     isCardOpen,
     getValueOrDefault,
-  } = useCardBusiness();
+    cardView,
+  } = useCardBusiness({ business });
 
   return (
     <Card
@@ -40,33 +41,9 @@ export const CardBusiness = ({ business }: CardBusinessProps) => {
         title="Business"
       />
       <CardContent>
-        <Typography variant="body2" gutterBottom>
-          {`Name: ${getValueOrDefault(business?.businessName)}`}
-        </Typography>
-        <Typography variant="body2" gutterBottom>
-          {`Naics Description: ${getValueOrDefault(
-            business?.primaryNaicsDescription
-          )}`}
-        </Typography>
-        <Typography variant="body2" gutterBottom>
-          {`Naics: ${getValueOrDefault(business?.naics)}`}
-        </Typography>
-        <Typography variant="body2" gutterBottom>
-          {`City: ${getValueOrDefault(business?.city)}`}
-        </Typography>
-        <Typography variant="body2" gutterBottom>
-          {`Address: ${getValueOrDefault(business?.streetAdress)}`}
-        </Typography>
-        <Typography variant="body2" gutterBottom>
-          {`Zip Code: ${getValueOrDefault(business?.zipCode)}`}
-        </Typography>
-        <Typography variant="body2" gutterBottom>
-          {`Start Date: ${getValueOrDefault(
-            business?.locationStartDate
-              ? new Date(business?.locationStartDate).toLocaleDateString()
-              : undefined
-          )}`}
-        </Typography>
+        {Object.entries(cardView).map(([label, value]) => (
+          <Label key={label} label={label} value={value} />
+        ))}
       </CardContent>
     </Card>
   );

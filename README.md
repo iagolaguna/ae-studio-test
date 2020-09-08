@@ -2,7 +2,7 @@
 
 ## Live Demo
 
-![How to use](/assets/demo.gif)
+![How to use](/assets/live-demo.gif)
 
 ## Client
 

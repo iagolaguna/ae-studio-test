@@ -6,6 +6,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:watch": "react-scripts test --watchAll",
     "eject": "react-scripts eject",
     "lint": "eslint --fix src/**/*.ts"
   },
@@ -27,7 +28,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "yarn lint",
-      "pre-push": "yarn test"
+      "pre-push": "CI=true react-scripts test"
     }
   },
   "dependencies": {

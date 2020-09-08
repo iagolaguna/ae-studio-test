@@ -45,7 +45,7 @@ export const Home = () => {
       <Map
         className={classes.map}
         center={center}
-        zoom={10}
+        zoom={7}
         minZoom={3}
         animate
         fadeAnimation

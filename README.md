@@ -1,5 +1,9 @@
 # ae-studio-test
 
+## Live Demo
+
+![How to use](/assets/demo.mov)
+
 ## Client
 
 ## Description

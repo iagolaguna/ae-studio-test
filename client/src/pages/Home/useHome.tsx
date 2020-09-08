@@ -24,7 +24,7 @@ export const useHome = () => {
   const [viewMode, setViewMode] = useState(OLD_BUSINESS_VIEW);
   const [focusedBusiness, setFocusedBusiness] = useState<Business>();
   const [business, setBusiness] = useState<Business[]>([]);
-  const [center, setCenter] = useState<LatLngTuple>([39.106667, -94.676392]);
+  const [center, setCenter] = useState<LatLngTuple>([34.0194, -118.411]);
 
   const {
     loading: oldBusinessLoading,

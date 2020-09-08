@@ -2,7 +2,14 @@ import React from "react";
 import { Map, TileLayer, Marker } from "react-leaflet";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
-import { useMediaQuery, Theme } from "@material-ui/core";
+import {
+  useMediaQuery,
+  Theme,
+  Backdrop,
+  CircularProgress,
+  Tooltip,
+  Fab,
+} from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import { useHome } from "./useHome";
@@ -15,6 +22,7 @@ import Business from "types/Business";
 export const Home = () => {
   const classes = useStyles();
   const {
+    loading,
     center,
     business,
     focusedBusiness,
@@ -29,6 +37,13 @@ export const Home = () => {
 
   return (
     <div className={classes.root}>
+      <Backdrop
+        open={loading}
+        className={classes.backdrop}
+        data-testid="loader"
+      >
+        <CircularProgress color="primary" variant="indeterminate" />
+      </Backdrop>
       <Map
         className={classes.map}
         center={center}

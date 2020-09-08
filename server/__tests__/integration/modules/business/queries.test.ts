@@ -23,7 +23,7 @@ describe('Business', () => {
       mockAxios.onGet(BUSINESS_DATA_URL).reply(200, thirdPartyBusiness)
       await findAndStoreData()
       const businessWithMostLocations: any[] = await findBusinessWithMostLocations()
-      
+
       expect(businessWithMostLocations.length).toEqual(4)
       expect(businessWithMostLocations).toEqual(expect.arrayContaining([
         expect.objectContaining({ businessName: 'MOST LOCATION BUSINESS' }),

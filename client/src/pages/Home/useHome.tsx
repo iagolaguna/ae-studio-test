@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import BusinessIcon from "@material-ui/icons/Business";
 import LocationCityIcon from "@material-ui/icons/LocationCity";
 import { useQuery, useLazyQuery } from "@apollo/client";
@@ -41,10 +41,13 @@ export const useHome = () => {
     },
   ] = useLazyQuery<MostLocationsBusiness>(GET_MOST_LOCATIONS_BUSINESS);
 
-  const getLocation = (business?: Business): LatLngTuple =>
-    business && business.location
-      ? [business.location.latitude, business.location.longitude]
-      : center;
+  const getLocation = useCallback(
+    (business?: Business): LatLngTuple =>
+      business && business.location
+        ? [business.location.latitude, business.location.longitude]
+        : center,
+    []
+  );
 
   useEffect(() => {
     if (viewMode === OLD_BUSINESS_VIEW && oldBusinessData) {
@@ -53,7 +56,7 @@ export const useHome = () => {
       setBusiness([oldestBusiness]);
       setCenter(getLocation(oldestBusiness));
     }
-  }, [viewMode, oldBusinessData]);
+  }, [viewMode, getLocation, oldBusinessData]);
 
   useEffect(() => {
     if (
@@ -66,7 +69,7 @@ export const useHome = () => {
       setBusiness(data);
       setCenter(getLocation(business));
     }
-  }, [viewMode, mostLocationsBusinessData]);
+  }, [viewMode, getLocation, mostLocationsBusinessData]);
 
   const actions = [
     {

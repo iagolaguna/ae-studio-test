@@ -1,11 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import {
-  Card,
-  CardHeader,
-  Avatar,
-  CardContent,
-} from "@material-ui/core";
+import { Card, CardHeader, Avatar, CardContent } from "@material-ui/core";
 import BusinessIcon from "@material-ui/icons/Business";
 import Business from "types/Business";
 import { useCardBusiness } from "./useCardBusiness";
@@ -28,6 +23,7 @@ export const CardBusiness = ({ business }: CardBusinessProps) => {
 
   return (
     <Card
+      data-testid="card-business"
       {...(matches ? handlers : {})}
       elevation={2}
       className={clsx(classes.card, isCardOpen && classes.cardToggle)}

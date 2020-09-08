@@ -17,7 +17,6 @@ export const CardBusiness = ({ business }: CardBusinessProps) => {
     matches,
     handlers,
     isCardOpen,
-    getValueOrDefault,
     cardView,
   } = useCardBusiness({ business });
 

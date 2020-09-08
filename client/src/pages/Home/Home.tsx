@@ -7,8 +7,6 @@ import {
   Theme,
   Backdrop,
   CircularProgress,
-  Tooltip,
-  Fab,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
@@ -54,9 +52,10 @@ export const Home = () => {
       >
         <TileLayer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png" />
         {business.map(
-          (business: Business) =>
+          (business: Business, index) =>
             business.location && (
               <Marker
+                key={index}
                 icon={
                   business === focusedBusiness
                     ? FocusBusinessPinIcon

@@ -6,6 +6,7 @@ import { GET_OLD_BUSINESS } from "./queries/GetOldBusinessQuery";
 import { GET_MOST_LOCATIONS_BUSINESS } from "./queries/GetMostLocationsBusinessQuery";
 import Business from "types/Business";
 import { LatLngTuple } from "leaflet";
+import Location from "types/Location";
 
 const OLD_BUSINESS_VIEW = 0;
 const MOST_LOCATIONS_BUSINESS_VIEW = 1;
@@ -26,7 +27,6 @@ export const useHome = () => {
   const [center, setCenter] = useState<LatLngTuple>([39.106667, -94.676392]);
 
   const {
-    error: oldBusinessError,
     loading: oldBusinessLoading,
     data: oldBusinessData,
     refetch: oldBusinessRefetch,
@@ -34,18 +34,14 @@ export const useHome = () => {
 
   const [
     getMostLocationsBusiness,
-    {
-      error: mostLocationsBusinessError,
-      data: mostLocationsBusinessData,
-      loading: mostLocationsBusinessLoading,
-    },
+    { data: mostLocationsBusinessData, loading: mostLocationsBusinessLoading },
   ] = useLazyQuery<MostLocationsBusiness>(GET_MOST_LOCATIONS_BUSINESS);
 
   const getLocation = useCallback(
-    (business?: Business): LatLngTuple =>
-      business && business.location
-        ? [business.location.latitude, business.location.longitude]
-        : center,
+    (location: Location): LatLngTuple => [
+      location.latitude,
+      location.longitude,
+    ],
     []
   );
 
@@ -54,7 +50,8 @@ export const useHome = () => {
       const { oldestBusiness } = oldBusinessData;
       setFocusedBusiness(oldestBusiness);
       setBusiness([oldestBusiness]);
-      setCenter(getLocation(oldestBusiness));
+      if (oldestBusiness && oldestBusiness.location)
+        setCenter(getLocation(oldestBusiness.location));
     }
   }, [viewMode, getLocation, oldBusinessData]);
 
@@ -67,7 +64,8 @@ export const useHome = () => {
       const business = data.find((buss: Business) => !!buss.location);
       setFocusedBusiness(business || data[0]);
       setBusiness(data);
-      setCenter(getLocation(business));
+      if (business && business.location)
+        setCenter(getLocation(business.location));
     }
   }, [viewMode, getLocation, mostLocationsBusinessData]);
 

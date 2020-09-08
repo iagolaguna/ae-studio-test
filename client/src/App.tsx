@@ -7,8 +7,9 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import { Home } from "./pages/Home/Home";
 import { theme } from "./theme";
 
+const uri = process.env.REACT_APP_BASE_URL;
 const client = new ApolloClient({
-  uri: "http://localhost:8000",
+  uri,
   cache: new InMemoryCache(),
 });
 

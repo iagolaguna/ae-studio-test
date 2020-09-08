@@ -35,6 +35,5 @@ export const useCardBusiness = ({ business }: useCardBusinessProps) => {
     matches,
     isCardOpen,
     handlers,
-    getValueOrDefault,
   };
 };

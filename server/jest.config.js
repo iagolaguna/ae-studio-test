@@ -9,5 +9,6 @@ module.exports = {
   preset: 'ts-jest',
   testMatch: ['**/__tests__/*test.ts?(x)', '**/__tests__/**/*test.ts?(x)'],
   modulePathIgnorePatterns: ['<rootDir>/__tests__/helpers'],
-  collectCoverageFrom: ['src/**/*.ts', '!src/index.ts']
+  collectCoverageFrom: ['src/**/*.ts', '!src/index.ts'],
+  setupFiles: ['<rootDir>/src/setupTests.ts']
 }

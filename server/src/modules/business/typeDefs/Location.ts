@@ -18,7 +18,7 @@ export class Location {
 export const createLocationFromThirdPartyLocation = ({ latitude, longitude }: ThirdPartyLocation) => {
   const parsedLatitude = parseFloat(latitude)
   const parsedLongitude = parseFloat(longitude)
-  if (parsedLatitude === 0 && parsedLongitude === 0) {
+  if ((parsedLatitude === 0 && parsedLongitude === 0) || isNaN(parsedLatitude) || isNaN(parsedLongitude)) {
     return
   }
   return new Location(parsedLatitude, parsedLongitude)
